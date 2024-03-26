@@ -1,13 +1,14 @@
+
+using srv1.ServerData;
+using System.Drawing;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,29 +17,30 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/display", () =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    var bounds = Screen.GetSize();
+    return new DisplayInfo() { Width = bounds.Width, Height = bounds.Height };
 })
-.WithName("GetWeatherForecast")
+.WithName("GetDisplayWidth")
 .WithOpenApi();
 
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+app.MapPost("/pixel", (Point point) =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    var color = Screen.GetColorAt(point);
+    return new PixelColorInfo { PixelColor = color};
+})
+.WithName("GetPixelColor")
+.WithOpenApi();
+
+/*
+app.MapGet("/test", () =>
+{
+    // TODO
+    return new Point() { X = 100, Y = 200 };
+})
+.WithName("TEST")
+.WithOpenApi();
+*/
+
+app.Run();

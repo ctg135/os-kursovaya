@@ -1,0 +1,6 @@
+# Binaries and object files
+**/bin/
+**/obj/
+
+# IDE files
+.vscode/

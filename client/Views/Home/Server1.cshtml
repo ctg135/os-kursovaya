@@ -1,0 +1,30 @@
+@model FormServer1Display
+<div id="srv1-form">
+<h2>Сервер 1</h2>
+<p>
+<ul>
+Отображает:
+<li>ширину и высоту основного монитора</li>
+<li>цвет пикселя на сервере для переданных от клиента координат</li>
+</ul>
+</p>
+<form method="post">
+    <p>
+        <label for="address">Адрес сервера</label>
+        <input type="text" name="address" value="@Model.address" />
+    </p>
+    <p>
+        <label>Координаты x и y для точки: </label>
+        <input type="number" name="xpos" placeholder="x" />
+        <label>x</label>
+        <input type="number" name="ypos" placeholder="y" />
+    </p>
+    <input type="submit" name="srv1-submit" value="Проверить"/>
+</form>
+<div name="src1-info" style="background-color: lightgreen;">
+    <p>Полученные данные:</p>
+    <p>Разрешение основоного монитора @Model.dimension</p>
+    <div name="srv1-color-pixel" style="width: 50px; height: 50px; background-color: rgb@{@Model.color};"> </div>
+    <p>Цвет пикселя на экране: RGB @Model.color</p>
+</div>
+</div>

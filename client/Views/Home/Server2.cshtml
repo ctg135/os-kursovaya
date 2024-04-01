@@ -1,0 +1,20 @@
+<div id="srv1-form">
+<h2>Сервер 2</h2>
+<p><ul>
+Отображает:
+<li>Идентификатор серверного процесса</li>
+<li>Дескриптор серверного процесса</li></ul></p>
+
+@using (Html.BeginForm("Server2", "Home", FormMethod.Post)) {
+    <p>
+        <label>Адрес сервера</label>
+        <input type="text" name="srv2-address" value="Адрес:порт" />
+    </p>
+    <input type="submit" name="srv2-submit" value="Проверить"/>
+}
+<div name="srv2-info" style="background-color: lightgreen;">
+    <p>Полученные данные:</p>
+    <p>Идентификатор серверного процесса: 43232</p>
+    <p>Дескриптор серверного процесса: 0</p>
+</div>
+</div>

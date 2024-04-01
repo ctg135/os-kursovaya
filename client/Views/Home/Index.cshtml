@@ -1,56 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Салабаев Р.С. - БВТ2151 Курсовая работа по Операционным системам";
-}
+﻿
 
-<div id="srv1-form">
-<h2>Сервер 1</h2>
-<p>
-<ul>
-Отображает:
-<li>ширину и высоту основного монитора</li>
-<li>цвет пикселя на сервере для переданных от клиента координат</li>
-</ul>
-</p>
-@using (Html.BeginForm("Server1", "Home", FormMethod.Post)) {
-    <p>
-        <label>Адрес сервера</label>
-        <input type="text" name="srv1-address" value="Адрес:порт" />
-    </p>
-    <p>
-        <label>Координаты x и y для точки: </label>
-        <input type="number" name="xpos" placeholder="x" />
-        <label>x</label>
-        <input type="number" name="ypos" placeholder="y" />
-    </p>
-    <input type="submit" name="srv1-submit" value="Проверить"/>
-}
-<div name="src1-info" style="background-color: lightgreen;">
-    <p>Полученные данные:</p>
-    <p>Разрешение основоного монитора 1600x900</p>
-    <div name="srv1-color-pixel" style="width: 50px; height: 50px; background-color: red;"> </div>
-    <p>Цвет пикселя на экране: RGB (255, 0, 0)</p>
-</div>
-</div>
+<a asp-controller="Home" asp-action="Server1">Сервер 1</a>
+<a asp-controller="Home" asp-action="Server2">Сервер 2</a>
 
 
-<div id="srv1-form">
-<h2>Сервер 2</h2>
-<p><ul>
-Отображает:
-<li>Идентификатор серверного процесса</li>
-<li>Дескриптор серверного процесса</li></ul></p>
 
-@using (Html.BeginForm("Server2", "Home", FormMethod.Post)) {
-    <p>
-        <label>Адрес сервера</label>
-        <input type="text" name="srv2-address" value="Адрес:порт" />
-    </p>
-    <input type="submit" name="srv2-submit" value="Проверить"/>
-}
-<div name="srv2-info" style="background-color: lightgreen;">
-    <p>Полученные данные:</p>
-    <p>Идентификатор серверного процесса: 43232</p>
-    <p>Дескриптор серверного процесса: 0</p>
-</div>
-</div>
+
 

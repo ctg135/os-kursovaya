@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using srv2.ServerData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,8 +40,11 @@ app.MapGet("/handle", () =>
 
 app.Run();
 
-public record Handles
+namespace srv2.ServerData
 {
-    public long MainHandle { get; init; }
-    public long ProcessHandle { get; init; }
+    public record Handles
+    {
+        public long MainHandle { get; init; }
+        public long ProcessHandle { get; init; }
+    }
 }

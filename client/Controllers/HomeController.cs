@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using client.Models;
 using srv1.ServerData;
+using srv2.ServerData;
 
 namespace client.Controllers;
 
@@ -95,13 +96,48 @@ public class HomeController : Controller
         return View(display);
     }
     [HttpGet]
-    public IActionResult Server2(){
-        return View();
+    public IActionResult Server2(FormServer2Display display){
+        return View(display);
     }
 
     [HttpPost]
-    public IActionResult Server2(FormServer1 form){
-        return RedirectToAction("Index", "Home");
+    public async Task<IActionResult> Server2(FormServer2 form){
+
+        string pid = "";
+        string did = "";
+
+        try 
+        {
+            var response = await client.GetAsync($"http://{form.address}/handle");
+            if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound)
+            {
+                // Error? error = await response.Content.ReadFromJsonAsync<Error>();
+                // Console.WriteLine(response.StatusCode);
+                // Console.WriteLine(error?.Message);
+            }
+            else 
+            {
+                Handles? handles = await response.Content.ReadFromJsonAsync<Handles>();
+                pid = handles.ProcessHandle.ToString();
+                did = handles.MainHandle.ToString();
+            }
+        }
+        catch (Exception)
+        {
+                return RedirectToAction("Server2", "Home", new FormServer2Display() {
+                     address = form.address,
+                     isError = true
+                      });
+        }
+        
+        var display = new FormServer2Display()
+        {
+            address = form.address,
+            pid = pid,
+            did = did
+        };
+
+        return View(display);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

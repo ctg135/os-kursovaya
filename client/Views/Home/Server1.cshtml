@@ -1,4 +1,10 @@
 @model FormServer1Display
+
+@if (Model.isError){
+<script>
+alert("Сервер недоступен");
+</script>
+}
 <div id="srv1-form">
 <h2>Сервер 1</h2>
 <p>
@@ -15,24 +21,24 @@
     </p>
     <p>
         <label>Координаты x и y для точки: </label>
-        <input type="number" name="xpos" placeholder="x" />
+        <input type="number" name="xpos" min="1" placeholder="x" />
         <label>x</label>
-        <input type="number" name="ypos" placeholder="y" />
+        <input type="number" name="ypos" min="1" placeholder="y" />
     </p>
-    <input type="submit" name="srv1-submit" value="Проверить"/>
+    <input class="button" type="submit" name="srv1-submit" value="Проверить"/>
 </form>
-@if(!string.IsNullOrWhiteSpace(Model.color) || !string.IsNullOrWhiteSpace(Model.dimension))
+@if(!string.IsNullOrWhiteSpace(Model.color) || !string.IsNullOrWhiteSpace(Model.screenX) || !string.IsNullOrWhiteSpace(Model.screenY))
 {
-    <div name="src1-info" style="background-color: lightgreen;">
-    <p>Полученные данные:</p>
-    @if(!string.IsNullOrWhiteSpace(Model.dimension))
+    <div class="srv-info">
+    <p><b>Полученные данные:</b></p>
+    @if(!string.IsNullOrWhiteSpace(Model.screenX) || !string.IsNullOrWhiteSpace(Model.screenY))
     {
-        <p>Разрешение основоного монитора @Model.dimension</p>
+        <p>Разрешение основоного монитора: @{@Model.screenX}x@{@Model.screenY}</p>
     }
     @if(!string.IsNullOrWhiteSpace(Model.color))
     {
-        <div name="srv1-color-pixel" style="width: 50px; height: 50px; background-color: rgb@{@Model.color};"></div>
-        <p>Цвет пикселя на экране: RGB @Model.color</p>
+        <div class="color-pixel" style="background-color: rgb@{@Model.color};"></div>
+        <p>Цвет пикселя (@{@Model.xpos}; @{@Model.xpos}) на экране: <b>RGB @Model.color</b></p>
     }
     </div>
 }

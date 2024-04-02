@@ -18,7 +18,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapGet("/display", () =>
-{
+{ 
     var bounds = Screen.GetSize();
     return new DisplayInfo() { Width = bounds.Width, Height = bounds.Height };
 })
@@ -27,20 +27,9 @@ app.MapGet("/display", () =>
 
 app.MapPost("/pixel", (Point point) =>
 {
-    var color = Screen.GetColorAt(point);
-    return color;
+    return Screen.GetColorAt(point);
 })
 .WithName("GetPixelColor")
 .WithOpenApi();
-
-/*
-app.MapGet("/test", () =>
-{
-    // TODO
-    return new Point() { X = 100, Y = 200 };
-})
-.WithName("TEST")
-.WithOpenApi();
-*/
 
 app.Run();

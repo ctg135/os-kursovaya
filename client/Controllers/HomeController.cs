@@ -4,9 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
-
 using Newtonsoft.Json;
-
 using client.Models;
 using srv1.ServerData;
 
@@ -35,28 +33,15 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> Server1(FormServer1 form)
     {
-        string dimension = "";
+        string screenX = "";
+        string screenY = "";
         string color = "";
 
         if (!string.IsNullOrWhiteSpace(form.address))
         {
-            var response = await client.GetAsync($"http://{form.address}/display");
-            if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound)
+            try
             {
-                // Error? error = await response.Content.ReadFromJsonAsync<Error>();
-                // Console.WriteLine(response.StatusCode);
-                // Console.WriteLine(error?.Message);
-            }
-            else 
-            {
-                DisplayInfo? displayInfo = await response.Content.ReadFromJsonAsync<DisplayInfo>();
-                dimension = $"{displayInfo.Width}x{displayInfo.Height}";
-            }
-
-            if (form.xpos > 0 && form.ypos > 0)
-            {
-                Point point = new Point(){ X = form.xpos, Y = form.ypos };
-                response = await client.PostAsJsonAsync($"http://{form.address}/pixel", point);
+                var response = await client.GetAsync($"http://{form.address}/display");
                 if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound)
                 {
                     // Error? error = await response.Content.ReadFromJsonAsync<Error>();
@@ -65,11 +50,35 @@ public class HomeController : Controller
                 }
                 else 
                 {
-                    string json = await response.Content.ReadAsStringAsync();
-                    var pixelColor = JsonConvert.DeserializeObject<MyColor>(json);
-                    // PixelColorInfo? pixelColor = await response.Content.ReadFromJsonAsync<PixelColorInfo>();
-                    color = $"({pixelColor.r}, {pixelColor.g}, {pixelColor.b})";
+                    DisplayInfo? displayInfo = await response.Content.ReadFromJsonAsync<DisplayInfo>();
+                    screenX = displayInfo.Width.ToString();
+                    screenY = displayInfo.Height.ToString();
                 }
+
+                if (form.xpos > 0 && form.ypos > 0)
+                {
+                    Point point = new Point(){ X = form.xpos, Y = form.ypos };
+                    response = await client.PostAsJsonAsync($"http://{form.address}/pixel", point);
+                    if (response.StatusCode == HttpStatusCode.BadRequest || response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        // Error? error = await response.Content.ReadFromJsonAsync<Error>();
+                        // Console.WriteLine(response.StatusCode);
+                        // Console.WriteLine(error?.Message);
+                    }
+                    else 
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        var pixelColor = JsonConvert.DeserializeObject<MyColor>(json);
+                        color = $"({pixelColor.r}, {pixelColor.g}, {pixelColor.b})";
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Server1", "Home", new FormServer1Display() {
+                     address = form.address,
+                     isError = true
+                      });
             }
         }
 
@@ -79,7 +88,8 @@ public class HomeController : Controller
             xpos = form.xpos,
             ypos = form.ypos,
             color = color,
-            dimension = dimension
+            screenX = screenX,
+            screenY = screenY
         };
 
         return View(display);

@@ -28,7 +28,7 @@ app.MapGet("/display", () =>
 app.MapPost("/pixel", (Point point) =>
 {
     var color = Screen.GetColorAt(point);
-    return new PixelColorInfo { PixelColor = color};
+    return color;
 })
 .WithName("GetPixelColor")
 .WithOpenApi();

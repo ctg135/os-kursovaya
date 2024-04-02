@@ -21,10 +21,18 @@
     </p>
     <input type="submit" name="srv1-submit" value="Проверить"/>
 </form>
-<div name="src1-info" style="background-color: lightgreen;">
+@if(!string.IsNullOrWhiteSpace(Model.color) || !string.IsNullOrWhiteSpace(Model.dimension))
+{
+    <div name="src1-info" style="background-color: lightgreen;">
     <p>Полученные данные:</p>
-    <p>Разрешение основоного монитора @Model.dimension</p>
-    <div name="srv1-color-pixel" style="width: 50px; height: 50px; background-color: rgb@{@Model.color};"> </div>
-    <p>Цвет пикселя на экране: RGB @Model.color</p>
-</div>
-</div>
+    @if(!string.IsNullOrWhiteSpace(Model.dimension))
+    {
+        <p>Разрешение основоного монитора @Model.dimension</p>
+    }
+    @if(!string.IsNullOrWhiteSpace(Model.color))
+    {
+        <div name="srv1-color-pixel" style="width: 50px; height: 50px; background-color: rgb@{@Model.color};"></div>
+        <p>Цвет пикселя на экране: RGB @Model.color</p>
+    }
+    </div>
+}

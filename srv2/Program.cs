@@ -1,6 +1,11 @@
 using System.Diagnostics;
 using srv2.ServerData;
 
+bool cn;
+Mutex m = new Mutex(true, "srv1", out cn);
+if(!m.WaitOne(0, false))
+    return;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

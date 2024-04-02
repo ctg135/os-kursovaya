@@ -2,6 +2,11 @@
 using srv1.ServerData;
 using System.Drawing;
 
+bool cn;
+Mutex m = new Mutex(true, "srv1", out cn);
+if(!m.WaitOne(0, false))
+    return;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();

@@ -1,4 +1,5 @@
 namespace client.Models;
+// Данные для отображения формы сервера 2
 public record FormServer2Display
 {
     public string? address { get; init; }

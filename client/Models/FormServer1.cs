@@ -1,4 +1,5 @@
 namespace client.Models;
+// Данные формы сервера 1
 public record FormServer1
 {
     public string? address { get; init; }

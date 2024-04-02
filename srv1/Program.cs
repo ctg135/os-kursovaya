@@ -2,6 +2,7 @@
 using srv1.ServerData;
 using System.Drawing;
 
+// Проверка на создание второго экземпляра
 bool cn;
 Mutex m = new Mutex(true, "srv1", out cn);
 if(!m.WaitOne(0, false))
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Маршрут для получения разршения основного монитора
 app.MapGet("/display", () =>
 { 
     var bounds = Screen.GetSize();
@@ -30,6 +32,7 @@ app.MapGet("/display", () =>
 .WithName("GetDisplayWidth")
 .WithOpenApi();
 
+// Маршрут для получения цвета пикселя по координате
 app.MapPost("/pixel", (Point point) =>
 {
     return Screen.GetColorAt(point);
@@ -37,4 +40,5 @@ app.MapPost("/pixel", (Point point) =>
 .WithName("GetPixelColor")
 .WithOpenApi();
 
+// Запуск приложения
 app.Run();

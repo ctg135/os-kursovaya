@@ -29,7 +29,7 @@ app.MapGet("/handle", () =>
     // Получение и передача системной информации
     var process = Process.GetCurrentProcess();
     return new Handles() {
-        MainHandle = process.MainWindowHandle,
+        MainHandle = process.Id,
         ProcessHandle = process.Handle
     };
 })

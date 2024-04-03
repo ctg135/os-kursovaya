@@ -1,15 +1,20 @@
 using System.Diagnostics;
+using srv2.ServerData;
+
+// Проверка на создание второго экземпляра программы
+bool cn;
+Mutex m = new Mutex(true, "srv2", out cn);
+if(!m.WaitOne(0, false))
+    return;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Конфигурация HTTP пайплайна
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -18,15 +23,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/process", () =>
-{
-    return Process.GetCurrentProcess().Id;
-})
-.WithName("GetProcessId")
-.WithOpenApi();
-
+// Маршрут для получения информации с сервера
 app.MapGet("/handle", () =>
 {
+    // Получение и передача системной информации
     var process = Process.GetCurrentProcess();
     return new Handles() {
         MainHandle = process.MainWindowHandle,
@@ -36,11 +36,14 @@ app.MapGet("/handle", () =>
 .WithName("GetHandles")
 .WithOpenApi();
 
-
+// Запуск приложения
 app.Run();
 
-public record Handles
+namespace srv2.ServerData
 {
-    public long MainHandle { get; init; }
-    public long ProcessHandle { get; init; }
+    public record Handles
+    {
+        public long MainHandle { get; init; }
+        public long ProcessHandle { get; init; }
+    }
 }

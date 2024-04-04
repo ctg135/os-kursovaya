@@ -38,7 +38,7 @@ alert("Сервер недоступен");
     @if(!string.IsNullOrWhiteSpace(Model.color))
     {
         <div class="color-pixel" style="background-color: rgb@{@Model.color};"></div>
-        <p>Цвет пикселя (@{@Model.xpos}; @{@Model.xpos}) на экране: <b>RGB @Model.color</b></p>
+        <p>Цвет пикселя (@{@Model.xpos}; @{@Model.ypos}) на экране: <b>RGB @Model.color</b></p>
     }
     </div>
 }
